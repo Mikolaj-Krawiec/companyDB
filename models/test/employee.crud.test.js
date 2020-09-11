@@ -178,6 +178,10 @@ describe('Employee', () => {
       await testEmpOne.save();
     });
 
+    after( async () => {
+      await Department.deleteMany();
+    })
+
     it('should properly populate data', async () => {
         const employee = await Employee.findOne({ firstName: 'Employee_fn #1' }).populate('department');
         employee.firstName = 'Updated_Employee_fn #2';
