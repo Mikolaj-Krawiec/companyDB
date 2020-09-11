@@ -2,6 +2,7 @@ const Department = require('../department.model.js');
 const expect = require('chai').expect;
 const MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer;
 const mongoose = require('mongoose');
+const { deleteOne } = require('../department.model.js');
 
 describe('Department', () => {
   before(async () => {
@@ -14,6 +15,7 @@ describe('Department', () => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       });
+      done(); 
     } catch (err) {
       console.log(err);
     }
@@ -29,8 +31,7 @@ describe('Department', () => {
 
     it('should return all the data with "find" method', async () => {
       const departments = await Department.find();
-      const expectedLength = 2;
-      expect(departments.length).to.be.equal(expectedLength);
+      expect(departments.length).to.be.equal(2);
     });
 
     it('should return a proper document by "name" with "findOne" method', async () => {
@@ -133,5 +134,10 @@ describe('Department', () => {
       const departments = await Department.find();
       expect(departments.length).to.be.equal(0);
     });
+  });
+
+  after( async() => {
+    await Department.deleteMany();
+    mongoose.models = {};
   });
 });
